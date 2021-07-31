@@ -7,18 +7,17 @@ const loader = document.getElementById('loader');
 
 let apiQuotes = [];
 
-//Show Loading
-function loading() {
+function showLoadingSpinner() {
     loader.hidden = false;
     quoteContainer.hidden = true;
 }
-//Hide Loading
-function complete() {
+
+function removeLoadingSpinner() {
     loader.hidden = true;
     quoteContainer.hidden = false;
 }
 
-//Return New Quote
+//Set New Quote
 function newQuote() {
     const quote = (apiQuotes.length > 0) ? apiQuotes[Math.floor(Math.random() * apiQuotes.length)] : newLocalQuote();
     setQuote(quote);
@@ -39,17 +38,16 @@ function setQuote (quote) {
 
 //Get Quotes from API
 async function getQuotes() {
-    loading();
+    showLoadingSpinner();
     const apiURL = 'https://type.fit/api/quotes';
     try {
         const response = await fetch(apiURL);
-        console.log("Fetching quotes");
         apiQuotes = await response.json();
     } catch (error) {
         console.log(`An error has occured: ${error}`);
     } finally {
         newQuote();
-        complete();
+        removeLoadingSpinner();
     }
 }
 
