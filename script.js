@@ -20,13 +20,13 @@ function complete() {
 
 //Return New Quote
 function newQuote() {
-    const quote = apiQuotes[Math.floor(Math.random() * apiQuotes.length)];
+    const quote = (apiQuotes.length > 0) ? apiQuotes[Math.floor(Math.random() * apiQuotes.length)] : newLocalQuote();
     setQuote(quote);
 }
 //Return New Local Quote
 function newLocalQuote() {
-    const quote = localQuotes[Math.floor(Math.random() * apiQuotes.length)];
-    setQuote(quote);
+    const quote = localQuotes[Math.floor(Math.random() * localQuotes.length)];
+    return quote;
 }
 
 //A setQuote Helper function
@@ -43,11 +43,12 @@ async function getQuotes() {
     const apiURL = 'https://type.fit/api/quotes';
     try {
         const response = await fetch(apiURL);
+        console.log("Fetching quotes");
         apiQuotes = await response.json();
-        newQuote();
     } catch (error) {
-        newLocalQuote();
+        console.log(`An error has occured: ${error}`);
     } finally {
+        newQuote();
         complete();
     }
 }
