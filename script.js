@@ -3,8 +3,20 @@ const quoteText = document.getElementById('quote');
 const quoteAuthor = document.getElementById('author');
 const twitterButton = document.getElementById('twitter');
 const newQuoteButton = document.getElementById('new-quote');
+const loader = document.getElementById('loader');
 
 let apiQuotes = [];
+
+//Show Loading
+function loading() {
+    loader.hidden = false;
+    quoteContainer.hidden = true;
+}
+//Hide Loading
+function complete() {
+    loader.hidden = true;
+    quoteContainer.hidden = false;
+}
 
 //Return New Quote
 function newQuote() {
@@ -27,6 +39,7 @@ function setQuote (quote) {
 
 //Get Quotes from API
 async function getQuotes() {
+    loading();
     const apiURL = 'https://type.fit/api/quotes';
     try {
         const response = await fetch(apiURL);
@@ -34,6 +47,8 @@ async function getQuotes() {
         newQuote();
     } catch (error) {
         newLocalQuote();
+    } finally {
+        complete();
     }
 }
 
